@@ -1,0 +1,6 @@
+{
+  "name": "IGCSE MCQ Auto-Grader",
+  "description": "Grading assistant that automatically extracts students' circled IGCSE MCQ answers, cross-references with official mark schemes using Gemini Flash, and displays grading performance with AI-driven corrections.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
