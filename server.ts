@@ -8,7 +8,6 @@ import path from "path";
 import multer from "multer";
 import dotenv from "dotenv";
 import { GoogleGenAI, Type } from "@google/genai";
-import { createServer as createViteServer } from "vite";
 
 // Load environment variables
 dotenv.config();
@@ -312,6 +311,7 @@ Keep your response in structured reader-friendly Markdown. Do not praise yoursel
 const startServer = async () => {
   if (process.env.NODE_ENV !== "production") {
     // Development mode server
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
@@ -333,6 +333,10 @@ const startServer = async () => {
   });
 };
 
-startServer().catch((err) => {
-  console.error("Critical server launch error:", err);
-});
+if (!process.env.VERCEL) {
+  startServer().catch((err) => {
+    console.error("Critical server launch error:", err);
+  });
+}
+
+export default app;

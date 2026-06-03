@@ -124,8 +124,13 @@ export default function App() {
       });
 
       if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || "An error occurred in the grading API pipeline.");
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const errData = await response.json();
+          throw new Error(errData.error || "An error occurred in the grading API pipeline.");
+        } else {
+          throw new Error(`Server returned ${response.status}. If hosting on Vercel, the Express API (server.ts) is not running by default unless configured as a Serverless Function.`);
+        }
       }
 
       const scoreResult: GradingResponse = await response.json();
@@ -166,8 +171,13 @@ export default function App() {
       });
 
       if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error || "Could not retrieve tutoring answer key tutorial.");
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const err = await response.json();
+          throw new Error(err.error || "Could not retrieve explanation.");
+        } else {
+          throw new Error(`Server returned ${response.status}. If hosting on Vercel, check your backend configuration.`);
+        }
       }
 
       const data = await response.json();
