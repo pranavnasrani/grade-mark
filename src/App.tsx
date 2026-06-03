@@ -129,7 +129,8 @@ export default function App() {
           const errData = await response.json();
           throw new Error(errData.error || "An error occurred in the grading API pipeline.");
         } else {
-          throw new Error(`Server returned ${response.status}. If hosting on Vercel, the Express API (server.ts) is not running by default unless configured as a Serverless Function.`);
+          const textMsg = await response.text();
+          throw new Error(`Server returned ${response.status}. Vercel Error: ${textMsg.substring(0, 500)}`);
         }
       }
 
@@ -176,7 +177,8 @@ export default function App() {
           const err = await response.json();
           throw new Error(err.error || "Could not retrieve explanation.");
         } else {
-          throw new Error(`Server returned ${response.status}. If hosting on Vercel, check your backend configuration.`);
+          const textMsg = await response.text();
+          throw new Error(`Server returned ${response.status}. Vercel Error: ${textMsg.substring(0, 500)}`);
         }
       }
 

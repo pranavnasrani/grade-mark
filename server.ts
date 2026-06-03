@@ -311,7 +311,7 @@ Keep your response in structured reader-friendly Markdown. Do not praise yoursel
 const startServer = async () => {
   if (process.env.NODE_ENV !== "production") {
     // Development mode server
-    const { createServer: createViteServer } = await import("vite");
+    const { createServer: createViteServer } = await eval('import("vite")');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
