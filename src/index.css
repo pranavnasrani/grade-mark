@@ -4,6 +4,24 @@
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --animate-progress: progress 15s ease-in-out infinite;
+  --animate-fadeIn: fadeIn 0.5s ease-out;
+  --animate-slideDown: slideDown 0.2s ease-out;
+
+  @keyframes progress {
+    0% { width: 0%; }
+    50% { width: 85%; }
+    100% { width: 85%; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
 body {
@@ -12,6 +30,8 @@ body {
   color: #1e293b;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 /* Elegant scrollbar styling */

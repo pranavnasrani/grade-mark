@@ -107,10 +107,12 @@ Extract all official question keys present in the paper. Make sure to map them a
 
     const markSchemeResponse = await ai.models.generateContent({
       model: "gemini-3.5-flash",
-      contents: [
-        markSchemePart,
-        { text: markSchemePrompt }
-      ],
+      contents: {
+        parts: [
+          markSchemePart,
+          { text: markSchemePrompt }
+        ]
+      },
       config: {
         systemInstruction: "You are an expert examiner logic module. Extract IGCSE correct keys as raw structural tables. Answer option letters must be single characters (A, B, C, or D).",
         responseMimeType: "application/json",
@@ -159,10 +161,12 @@ If no option has any mark, or if the student has left the question blank, return
 
     const studentResponse = await ai.models.generateContent({
       model: "gemini-3.5-flash",
-      contents: [
-        studentScriptPart,
-        { text: studentPrompt }
-      ],
+      contents: {
+        parts: [
+          studentScriptPart,
+          { text: studentPrompt }
+        ]
+      },
       config: {
         systemInstruction: "You are a state-of-the-art computer vision scoring model for Apple Pencil circles. Identify selection targets with extreme localized visual scrutiny.",
         responseMimeType: "application/json",
@@ -214,9 +218,10 @@ If no option has any mark, or if the student has left the question blank, return
     const gradedQuestions = studentAnswers.map(studentAns => {
       const match = markSchemeAnswers.find(m => Number(m.questionNumber) === Number(studentAns.questionNumber));
       const correctAnswer = match ? match.correctAnswer.trim().toUpperCase() : "N/A";
-      const studentAnswer = studentAns.studentAnswer ? studentAns.studentAnswer.trim().toUpperCase() : null;
+      const rawStudentAns = studentAns.studentAnswer ? studentAns.studentAnswer.trim().toUpperCase() : null;
+      const studentAnswer = rawStudentAns === "" ? null : rawStudentAns;
       
-      const isOmitted = studentAnswer === null || studentAnswer === "";
+      const isOmitted = studentAnswer === null;
       const isCorrect = !isOmitted && studentAnswer === correctAnswer;
 
       return {

@@ -19,7 +19,8 @@ import {
   Info, 
   ExternalLink,
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  Download
 } from 'lucide-react';
 import { QuestionResult, GradingResponse } from './types';
 
@@ -52,11 +53,11 @@ export default function App() {
   useEffect(() => {
     if (!isGrading) return;
     const progressSteps = [
-      "Analyzing IGCSE Mark Scheme structure...",
-      "Extracting correct MCQ answer keys of the exam...",
-      "Scrutinizing hand-drawn markings on the Student script...",
-      "Performing precise Python-analog comparison matching...",
-      "Formulating diagnostic statistics and visual indicators..."
+      "Analyzing mark scheme...",
+      "Extracting answer keys...",
+      "Reading student answers...",
+      "Grading exams...",
+      "Generating results..."
     ];
     let step = 0;
     setGradingProgress(progressSteps[0]);
@@ -266,23 +267,31 @@ export default function App() {
               <GraduationCap className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-slate-900 tracking-tight">IGCSE MCQ Auto-Grader</h1>
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight">MCQ Auto-Grader</h1>
               <p className="text-xs text-slate-500 flex items-center gap-1">
-                Visual Paper Scoring Module 
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>Powered by Gemini 3.5 Flash</span>
+                Paper Scoring
               </p>
             </div>
           </div>
           {result && (
-            <button 
-              id="btn_reset_header"
-              onClick={resetDashboard}
-              className="text-slate-600 hover:text-blue-600 text-sm font-medium flex items-center gap-2 border border-slate-200 px-3.5 py-1.5 rounded-xl hover:bg-slate-50 transition-colors"
-            >
-              <RotateCcw className="w-4 h-4" />
-              Reset Engine
-            </button>
+            <div className="flex items-center gap-3 print:hidden">
+              <button 
+                id="btn_export_pdf"
+                onClick={() => window.print()}
+                className="text-white bg-blue-600 hover:bg-blue-700 text-sm font-medium flex items-center gap-2 px-3.5 py-1.5 rounded-xl transition-colors shadow-sm"
+              >
+                <Download className="w-4 h-4" />
+                Export PDF
+              </button>
+              <button 
+                id="btn_reset_header"
+                onClick={resetDashboard}
+                className="text-slate-600 hover:text-blue-600 text-sm font-medium flex items-center gap-2 border border-slate-200 px-3.5 py-1.5 rounded-xl hover:bg-slate-50 transition-colors bg-white"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reset Engine
+              </button>
+            </div>
           )}
         </div>
       </header>
@@ -293,15 +302,11 @@ export default function App() {
           /* SECTION A: UPLOADING PLATFORM */
           <div className="max-w-3xl mx-auto space-y-8">
             <div className="text-center space-y-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
-                <Sparkles className="w-3.5 h-3.5" />
-                Intelligent Computer Vision MCQ Grading
-              </span>
               <h2 className="text-3xl font-bold text-slate-900 tracking-tight sm:text-4xl">
-                Grade circled test papers in seconds
+                Grade test papers automatically
               </h2>
               <p className="text-slate-600 max-w-lg mx-auto text-sm leading-relaxed">
-                Upload your official school PDF/Image mark scheme along with the student's handwritten papers. Our system calculates responses accurately.
+                Upload your official mark scheme along with the student's papers to calculate responses accurately.
               </p>
             </div>
 
@@ -415,7 +420,7 @@ export default function App() {
               <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 flex items-start gap-3 text-sm">
                 <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold">Workflow Interruption</p>
+                  <p className="font-semibold">Error</p>
                   <p className="text-xs mt-0.5 text-red-600">{gradingError}</p>
                 </div>
               </div>
@@ -430,7 +435,7 @@ export default function App() {
                     <div className="absolute inset-0 border-4 border-t-blue-600 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-semibold text-slate-800 animate-pulse">Running Gemini Flash Engine</p>
+                    <p className="text-sm font-semibold text-slate-800 animate-pulse">Grading in Progress...</p>
                     <p className="text-[11px] text-slate-500 min-h-[16px] tracking-wide font-mono px-4">{gradingProgress}</p>
                   </div>
                   <div className="progressbar w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
@@ -448,20 +453,11 @@ export default function App() {
                       : "bg-slate-200 text-slate-400 cursor-not-allowed"
                   }`}
                 >
-                  <Sparkles className="w-4 h-4" />
-                  Grade Circle-Marked Exam
+                  <FileText className="w-4 h-4" />
+                  Grade Exam
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </button>
               )}
-            </div>
-
-            {/* Informational Guidance */}
-            <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex gap-3 text-slate-600 text-xs">
-              <Info className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-semibold text-slate-800">Support Notes:</span>
-                <p>This auto-grader works perfectly with single or multipage physics, chemistry, biology, or math standard papers. It analyzes standard visual indications (faint scratches, bold Apple Pencil checkmarks, circles around choice characters) and outputs exact student codes.</p>
-              </div>
             </div>
           </div>
         ) : (
@@ -475,7 +471,7 @@ export default function App() {
               <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-between">
                 <div className="w-full text-left">
                   <h3 id="stat_header_score" className="text-xs font-bold text-slate-400 tracking-wider uppercase">Grading Summary</h3>
-                  <p className="text-slate-800 text-lg font-bold mt-0.5">Calculated Percentile</p>
+                  <p className="text-slate-800 text-lg font-bold mt-0.5">Score</p>
                 </div>
                 
                 {/* Visual Dial */}
@@ -504,7 +500,7 @@ export default function App() {
                 </div>
 
                 <div className="text-center w-full bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  <p className="text-xs text-slate-500 font-medium">Standard grade mapped according to IGCSE MCQs curve boundaries.</p>
+                  <p className="text-xs text-slate-500 font-medium">Overall score percentage.</p>
                 </div>
               </div>
 
@@ -551,7 +547,7 @@ export default function App() {
                     <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                       <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${result.scorePercentage}%` }}></div>
                     </div>
-                    <p className="mt-2 text-[10px] text-slate-400">Student responses aligned exactly to mark key values.</p>
+                    <p className="mt-2 text-[10px] text-slate-400">Correct answers.</p>
                   </div>
                 </div>
 
@@ -567,7 +563,7 @@ export default function App() {
                     </div>
                   </div>
                   <div className="border-t border-slate-100 pt-4 mt-4 text-xs text-slate-500">
-                    <p className="text-[11px] text-rose-500 font-medium">Questions needing visual review or student remediation.</p>
+                    <p className="text-[11px] text-rose-500 font-medium">Incorrect answers.</p>
                   </div>
                 </div>
 
@@ -583,7 +579,7 @@ export default function App() {
                     </div>
                   </div>
                   <div className="border-t border-slate-100 pt-4 mt-4 text-xs text-slate-500">
-                    <p className="text-[11px] text-slate-500 font-medium">No circled marking identified by vision script.</p>
+                    <p className="text-[11px] text-slate-500 font-medium">Omitted answers.</p>
                   </div>
                 </div>
 
@@ -597,12 +593,17 @@ export default function App() {
               {/* Filter controls */}
               <div className="px-6 py-5 border-b border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h3 className="text-base font-bold text-slate-800">Student Answer Matrix</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">Filter questions to study specific conceptual errors.</p>
+                  <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+                    Student Answer Matrix
+                    <span className="hidden print:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-200 text-slate-700">
+                      Filter: {filterType}
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5 print:hidden">Filter questions to study specific conceptual errors.</p>
                 </div>
                 
                 {/* Tabs */}
-                <div className="flex p-1 bg-slate-100 rounded-xl space-x-1 self-start sm:self-auto">
+                <div className="flex p-1 bg-slate-100 rounded-xl space-x-1 self-start sm:self-auto print:hidden">
                   <button 
                     id="tab_filter_all"
                     onClick={() => setFilterType('all')}
@@ -672,7 +673,7 @@ export default function App() {
                             
                             {/* Title info */}
                             <div className="min-w-0">
-                              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wide">IGCSE TOPIC KEYWORD</h4>
+                              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wide">QUESTION</h4>
                               <p className="text-sm font-semibold text-slate-800 truncate" title={q.questionTitle}>
                                 {q.questionTitle}
                               </p>
@@ -716,33 +717,32 @@ export default function App() {
                             </div>
 
                             {/* Accordion toggle character */}
-                            <div className="text-slate-400">
+                            <div className="text-slate-400 print:hidden">
                               {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                             </div>
                           </div>
                         </div>
 
                         {/* Accordion Panel Drawer Body */}
-                        {isExpanded && (
-                          <div id={`row_body_q_${q.questionNumber}`} className="px-6 pb-6 pt-1 bg-slate-50/70 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6 animate-[slideDown_0.2s_ease-out]">
+                        <div id={`row_body_q_${q.questionNumber}`} className={`${isExpanded ? "block animate-[slideDown_0.2s_ease-out]" : "hidden print:block"} px-6 pb-6 pt-1 bg-slate-50/70 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6`}>
                             
                             {/* Panel Left: Visual and Extracted Diagnostics */}
                             <div className="space-y-4">
                               <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
                                 <Info className="w-3.5 h-3.5 text-slate-400" />
-                                Exam Scan Diagnostics
+                                Diagnostics
                               </h5>
 
                               <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs">
                                 <div className="grid grid-cols-2 gap-4 text-xs">
                                   <div>
                                     <span className="text-slate-400 block font-medium">Page Location:</span>
-                                    <span className="text-slate-700 font-bold block mt-0.5">Page {q.pageNumber} of script</span>
+                                    <span className="text-slate-700 font-bold block mt-0.5">Page {q.pageNumber}</span>
                                   </div>
                                   <div>
-                                    <span className="text-slate-400 block font-medium">System Verdict:</span>
+                                    <span className="text-slate-400 block font-medium">Result:</span>
                                     <span className={`font-bold block mt-0.5 ${q.isCorrect ? "text-emerald-600" : "text-rose-600"}`}>
-                                      {q.studentAnswer === null ? "No Answer Submitted" : q.isCorrect ? "Score point allocated (1.0)" : "Incorrect Option Checked"}
+                                      {q.studentAnswer === null ? "Omitted" : q.isCorrect ? "Correct" : "Incorrect"}
                                     </span>
                                   </div>
                                 </div>
@@ -751,9 +751,8 @@ export default function App() {
                               <div className="bg-slate-100 border border-slate-200 rounded-xl p-3 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                   <FileText className="w-4 h-4 text-slate-500" />
-                                  <span className="text-xs font-medium text-slate-600">Review full Student PDF (page {q.pageNumber})</span>
+                                  <span className="text-xs font-medium text-slate-600">Review Student PDF (page {q.pageNumber})</span>
                                 </div>
-                                <span className="text-[10px] text-slate-400 uppercase font-mono">Reference point</span>
                               </div>
                             </div>
 
@@ -761,22 +760,25 @@ export default function App() {
                             <div className="space-y-4 flex flex-col justify-between">
                               <div className="space-y-3">
                                 <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center justify-between">
-                                  <span>Step-by-Step AI Explainer</span>
-                                  <span className="px-2 py-0.5 rounded-md bg-blue-50 text-[9px] text-blue-600 font-bold font-mono">IGCSE TEACHER</span>
+                                  <span>Explanation</span>
                                 </h5>
 
                                 {hasExplanation ? (
-                                  <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm max-h-[300px] overflow-y-auto">
+                                  <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm max-h-[300px] overflow-y-auto print:max-h-none print:overflow-visible">
                                     {renderMarkdown(explanations[q.questionNumber])}
                                   </div>
                                 ) : (
-                                  <div className="bg-slate-50/50 border border-slate-200 rounded-xl p-6 text-center space-y-4">
+                                  <>
+                                  <div className="hidden print:block bg-slate-50/50 border border-slate-200 rounded-xl p-4 text-center">
+                                    <p className="text-xs text-slate-500 italic">No explanation generated for this diagnostic entry.</p>
+                                  </div>
+                                  <div className="bg-slate-50/50 border border-slate-200 rounded-xl p-6 text-center space-y-4 print:hidden">
                                     <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
                                       <BookOpen className="w-5 h-5" />
                                     </div>
                                     <div className="space-y-1">
-                                      <h6 className="text-xs font-bold text-slate-800">Need a clear proof explanation?</h6>
-                                      <p className="text-[11px] text-slate-500">Gemini's diagnostic microcode will analyze option derivations step-by-step.</p>
+                                      <h6 className="text-xs font-bold text-slate-800">Need an explanation?</h6>
+                                      <p className="text-[11px] text-slate-500">Get a step-by-step explanation generated by AI.</p>
                                     </div>
                                     
                                     <button 
@@ -792,23 +794,23 @@ export default function App() {
                                       {isExplLoading ? (
                                         <>
                                           <div className="w-3 h-3 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
-                                          Generating study guide...
+                                          Generating explanation...
                                         </>
                                       ) : (
                                         <>
                                           <Sparkles className="w-3.5 h-3.5" />
-                                          Request Step-By-Step Solution
+                                          Request Explanation
                                         </>
                                       )}
                                     </button>
                                   </div>
+                                  </>
                                 )}
                               </div>
                             </div>
 
                           </div>
-                        )}
-                      </div>
+                        </div>
                     );
                   })}
                 </div>
@@ -824,12 +826,10 @@ export default function App() {
       <footer className="bg-white border-t border-slate-200 py-6 mt-12 shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-400">
-            © 2026 IGCSE Exam scoring pipeline systems. For educational simulation purposes only.
+            © 2026 IGCSE Auto-Grader.
           </p>
           <div className="flex gap-4 text-xs text-slate-400 font-medium">
-            <span>Deterministic Checker Mode: Active</span>
-            <span>•</span>
-            <span>Accuracy: Dual-Visual Verified</span>
+            <span>67</span>
           </div>
         </div>
       </footer>
