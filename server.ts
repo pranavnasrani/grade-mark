@@ -97,7 +97,7 @@ app.post("/api/grade-exam", upload.fields([
       },
     };
 
-    console.log("Analyzing and extracting accurate answers from Mark Scheme using gemini-3.5-flash...");
+    console.log("Analyzing and extracting accurate answers from Mark Scheme using gemini-3.1-flash-lite...");
     
     // Extract correct solutions from Mark Scheme
     const markSchemePrompt = `You are a high-precision Cambridge IGCSE grading evaluator. Please scan this official MCQ Mark Scheme.
@@ -105,7 +105,7 @@ Identify each question number and the single corresponding correct option capita
 Extract all official question keys present in the paper. Make sure to map them accurately.`;
 
     const markSchemeResponse = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.1-flash-lite",
       contents: {
         parts: [
           markSchemePart,
@@ -145,7 +145,7 @@ Extract all official question keys present in the paper. Make sure to map them a
 
     console.log("Mark Scheme parsed successfully. Total questions parsed:", markSchemeAnswers.length);
 
-    console.log("Analyzing student's circled choices inside Student Exam paper using gemini-3.5-flash...");
+    console.log("Analyzing student's circled choices inside Student Exam paper using gemini-3.1-flash-lite...");
 
     // Extract student's written/circled/tickmarked options from Student Script
     const studentPrompt = `You are an expert Cambridge IGCSE visual evaluation model. Examine this Student's submitted MCQ Exam script.
@@ -159,7 +159,7 @@ In addition, document:
 If no option has any mark, or if the student has left the question blank, return null for studentAnswer.`;
 
     const studentResponse = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.1-flash-lite",
       contents: {
         parts: [
           studentScriptPart,
@@ -290,7 +290,7 @@ Keep your response in structured reader-friendly Markdown. Do not praise yoursel
 
     console.log(`Generating visual step explanation for Question #${questionNumber}...`);
     const explanationResponse = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.1-flash-lite",
       contents: explanationPrompt,
     });
 
